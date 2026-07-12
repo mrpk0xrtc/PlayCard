@@ -1,12 +1,23 @@
 import random
 
 class Card:
+    trump_suit = None
+    trump_suit2 = None
+
     def __init__(self, rank, suit):
         self.rank = rank
         self.suit = suit
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
+
+    def __gt__(self, other):
+        if not (trump_suit and trump_suit2):
+            if self.rank > other.rank: return True
+            else: return False
+        else:
+            are_same = (self.suit == other.suit)
+            if are_same:
     
 class Deck:
     def __init__(self):
