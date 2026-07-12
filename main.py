@@ -7,8 +7,8 @@ class Card:
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
-    
-class Deck:
+
+class Deck: 
     def __init__(self):
         self._ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
         self._suits = ["diamonds", "hearts", "spades", "clubs"]
@@ -31,7 +31,29 @@ class Deck:
     def pop(self):
         return self._cards.pop()
 
-cards = Deck()
-cards.shuffle()
-for i in cards: print(i)
+class Player:
+    def __init__(self,cards):
+        self.cards=cards
+    
+    def __str__(self):
+        return str(self.cards)
 
+    def __iter__(self):
+        for i in self.cards:
+            yield str(i)
+
+    def select(self, r, s):
+        for i in self.cards:
+            if (i.rank== r)and(i.suit==s):
+                return i
+
+cards = Deck()
+# cards.shuffle()
+# for i in cards: print(i)
+
+p1_cards=list()
+for i in range(5): p1_cards.append(cards.pop())
+p = Player(p1_cards)
+# for i in p: print(i)
+c = p.select(13, "diamonds")
+print(c)
