@@ -2,7 +2,7 @@ import random
 
 class Card:
     trump_suit = None
-    trump_suit2 = None
+    trump_suit2 = True
 
     def __init__(self, rank, suit):
         self.rank = rank
@@ -17,8 +17,14 @@ class Card:
             else: return False
         else:
             are_same = (self.suit == other.suit)
+            one_is_trump = (self.suit == trump_suit)
+            two_is_trump = (other.suit == trump_suit)
             if are_same:
-    
+                if self.rank > other.rank: return True
+                else: return False
+            elif one_is_trump: return True
+            elif two_is_trump: return False
+
 class Deck: 
     def __init__(self):
         self._ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
