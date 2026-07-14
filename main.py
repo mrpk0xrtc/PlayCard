@@ -53,7 +53,10 @@ class Player:
         self.cards=cards
     
     def __str__(self):
-        return str(self.cards)
+        self.x=[]
+        for i in self.cards:
+            self.x=str(i)
+        return self.x
 
     def __iter__(self):
         for i in self.cards:
