@@ -78,6 +78,10 @@ class Player:
 
         del self._cards[index]
         return self.temp
+    
+    def add(self,ncard):
+        self._cards.append(ncard)
+        return 0
 
 if __name__ == "__main__":
     c1 = Card(4, "spades")
@@ -102,5 +106,8 @@ if __name__ == "__main__":
     print(p)
     print("_____________")
     p.pop(13,"hearts")
+    print(p)
+    print("_____________")
+    p.add(d.pop())
     print(p)
 
