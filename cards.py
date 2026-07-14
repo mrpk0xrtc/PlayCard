@@ -1,10 +1,13 @@
 import random
 
+suits = ["diamonds", "hearts", "spades", "clubs"]
+all_suits = suits + ["joker"]
+
 class Card:
     trump_suit = None
     current_suit = None
 
-    def __init__(self, rank, suit):
+    def __init__(self, rank: int, suit: str):
         self.rank = rank
         self.suit = suit
 
@@ -30,15 +33,34 @@ class Card:
                     return True if self.rank > other.rank else False
                 else: return True
         else: return False
+    
+    @property
+    def rank(self) -> int:
+        return self._rank
+
+    @rank.setter
+    def rank(self, rank):
+        if 1 <= rank <= 13: self._rank = rank
+        else: raise ValueError("Card rank must be between 1 and 13")
+
+    @property
+    def suit(self) -> str:
+        return self._suit
+
+    @suit.setter
+    def suit(self, suit):
+        suit = suit.lower()
+        if suit == "joker": self._rank = 1
+        if suit in all_suits: self._suit = suit
+        else: raise ValueError("Card suit must be spades, clubs, diamonds, hearts or joker")
 
 class Deck: 
-    def __init__(self):
-        self._ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-        self._suits = ["diamonds", "hearts", "spades", "clubs"]
-        self._cards = list()
+    def __init__(self, cards: list = []):
+        self._cards = cards
 
-        for i in self._ranks:
-            for j in self._suits:
+    def gen_cards(self, rank_range: int = 13, suits: list = suits):
+        for i in range(1, rank_range + 1):
+            for j in suits:
                 self._cards.append(Card(i, j.lower()))
 
     def __len__(self):
@@ -51,36 +73,34 @@ class Deck:
     def shuffle(self):
         random.shuffle(self._cards)
 
-    def pop(self):
+    def pop(self) -> Card:
         return self._cards.pop()
 
 class Player:
-    def __init__(self, cards=[]):
+    def __init__(self, cards: list = []):
         self._cards = cards
     
     def __str__(self):
-        self.tmp = ""
-
+        tmp = ""
         for i in self._cards:
-            self.tmp += str(i) + '\n'
-
-        return self.tmp
+            tmp += str(i) + '\n'
+        return tmp
 
     def __iter__(self):
         for i in self._cards:
             yield str(i)
 
-    def pop(self, r, s):
+    def pop(self, r: int, s: str) -> Card:
         for i in self._cards:
-            if (i.rank== r) and (i.suit==s):
-                index=self._cards.index(i)
-                self.temp=self._cards[index]
+            if (i.rank == r) and (i.suit ==s):
+                index = self._cards.index(i)
+                self.temp = self._cards[index]
 
         del self._cards[index]
         return self.temp
     
-    def add(self,ncard):
-        self._cards.append(ncard)
+    def add(self, card: Card):
+        self._cards.append(card)
         return 0
 
 if __name__ == "__main__":
@@ -98,6 +118,7 @@ if __name__ == "__main__":
     print(c3 > c4, "True")
     
     d=Deck()
+    d.gen_cards()
     cards1=[]
     for i in range(5):
         cards1.append(d.pop())
