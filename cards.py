@@ -55,7 +55,7 @@ class Deck:
         return self._cards.pop()
 
 class Player:
-    def __init__(self, cards):
+    def __init__(self, cards=[]):
         self._cards = cards
     
     def __str__(self):
