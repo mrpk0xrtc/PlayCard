@@ -59,10 +59,10 @@ class Player:
         self._cards = cards
     
     def __str__(self):
-        self.tmp = []
+        self.tmp = ""
 
         for i in self._cards:
-            self.tmp = str(i)
+            self.tmp += str(i) + '\n'
 
         return self.tmp
 
@@ -70,10 +70,14 @@ class Player:
         for i in self._cards:
             yield str(i)
 
-    def select(self, r, s):
+    def pop(self, r, s):
         for i in self._cards:
             if (i.rank== r) and (i.suit==s):
-                return i
+                index=self._cards.index(i)
+                self.temp=self._cards[index]
+
+        del self._cards[index]
+        return self.temp
 
 if __name__ == "__main__":
     c1 = Card(4, "spades")
@@ -88,3 +92,15 @@ if __name__ == "__main__":
     print(c4 > c2, "False")
     print(c3 > c2, "True")
     print(c3 > c4, "True")
+    
+    d=Deck()
+    cards1=[]
+    for i in range(5):
+        cards1.append(d.pop())
+
+    p=Player(cards1)
+    print(p)
+    print("_____________")
+    p.pop(13,"hearts")
+    print(p)
+
