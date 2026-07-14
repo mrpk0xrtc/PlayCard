@@ -49,13 +49,15 @@ class Deck:
         return self._cards.pop()
 
 class Player:
-    def __init__(self,cards):
-        self.cards=cards
+    def __init__(self, cards):
+        self._cards = cards
     
     def __str__(self):
-        self.x=[]
-        for i in self.cards:
-            self.x=str(i)
+        self.tmp = []
+
+        for i in self._cards:
+            self.tmp = str(i)
+
         return self.x
 
     def __iter__(self):
@@ -63,17 +65,8 @@ class Player:
             yield str(i)
 
     def select(self, r, s):
-        for i in self.cards:
-            if (i.rank== r)and(i.suit==s):
+        for i in self._cards:
+            if (i.rank== r) and (i.suit==s):
                 return i
+if __name__ == "__main__": pass
 
-cards = Deck()
-# cards.shuffle()
-# for i in cards: print(i)
-
-p1_cards=list()
-for i in range(5): p1_cards.append(cards.pop())
-p = Player(p1_cards)
-# for i in p: print(i)
-c = p.select(13, "diamonds")
-print(c)
