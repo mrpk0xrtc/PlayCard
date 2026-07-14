@@ -2,7 +2,7 @@ import random
 
 class Card:
     trump_suit = None
-    trump_suit2 = True
+    current_suit = None
 
     def __init__(self, rank, suit):
         self.rank = rank
@@ -12,18 +12,24 @@ class Card:
         return f"{self.rank} of {self.suit}"
 
     def __gt__(self, other):
-        if not (trump_suit and trump_suit2):
-            if self.rank > other.rank: return True
+        if not (Card.trump_suit and Card.current_suit):
+            if self.suit == other.suit:
+                return True if self.rank > other.rank else False
             else: return False
-        else:
-            are_same = (self.suit == other.suit)
-            one_is_trump = (self.suit == trump_suit)
-            two_is_trump = (other.suit == trump_suit)
-            if are_same:
-                if self.rank > other.rank: return True
-                else: return False
-            elif one_is_trump: return True
-            elif two_is_trump: return False
+
+        elif self.suit == Card.trump_suit:
+            if other.suit == Card.trump_suit:
+                return True if self.rank > other.rank else False
+            else:
+                return True
+
+        elif self.suit == Card.current_suit:
+            if other.suit == Card.trump_suit: return False
+            else:
+                if other.suit == Card.current_suit:
+                    return True if self.rank > other.rank else False
+                else: return True
+        else: return False
 
 class Deck: 
     def __init__(self):
@@ -33,7 +39,7 @@ class Deck:
 
         for i in self._ranks:
             for j in self._suits:
-                self._cards.append(Card(i,j))
+                self._cards.append(Card(i, j.lower()))
 
     def __len__(self):
         return len(self._cards)
@@ -58,15 +64,27 @@ class Player:
         for i in self._cards:
             self.tmp = str(i)
 
-        return self.x
+        return self.tmp
 
     def __iter__(self):
-        for i in self.cards:
+        for i in self._cards:
             yield str(i)
 
     def select(self, r, s):
         for i in self._cards:
             if (i.rank== r) and (i.suit==s):
                 return i
-if __name__ == "__main__": pass
 
+if __name__ == "__main__":
+    c1 = Card(4, "spades")
+    Card.trump_suit = "hearts"
+    Card.current_suit = "spades"
+    c2 = Card(5, "spades")
+    c3 = Card(2, "hearts")
+    c4 = Card(7, "clubs")
+    print(c2 > c1, "True")
+    print(c1 > c2, "False")
+    print(c2 > c4, "True")
+    print(c4 > c2, "False")
+    print(c3 > c2, "True")
+    print(c3 > c4, "True")
