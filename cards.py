@@ -14,6 +14,15 @@ class Card:
     def __str__(self):
         return f"{self.rank} of {self.suit}"
 
+    def __repr__(self):
+        return f"Card({self.rank}, {self.suit})"
+
+    def __hash__(self):
+        return hash(str(self.rank) + self.suit)
+
+    def __eq__(self, other):
+        return True if self.rank == other.rank and self.suit == other.suit else False
+
     def __gt__(self, other):
         if not (Card.trump_suit and Card.current_suit):
             if self.suit == other.suit:
@@ -90,7 +99,7 @@ class Player:
         for i in self._cards:
             yield str(i)
 
-    def pop(self, r: int, s: str) -> Card:
+    def draw(self, r: int, s: str) -> Card:
         for i in self._cards:
             if (i.rank == r) and (i.suit ==s):
                 index = self._cards.index(i)
@@ -110,12 +119,16 @@ if __name__ == "__main__":
     c2 = Card(5, "spades")
     c3 = Card(2, "hearts")
     c4 = Card(7, "clubs")
+    c5 = Card(7, "clubs")
     print(c2 > c1, "True")
     print(c1 > c2, "False")
     print(c2 > c4, "True")
     print(c4 > c2, "False")
     print(c3 > c2, "True")
     print(c3 > c4, "True")
+    print(c4 == c5, "True")
+    print(c3 < c4, "False")
+    print(hash(c4), hash(c5))
     
     d=Deck()
     d.gen_cards()
@@ -126,7 +139,7 @@ if __name__ == "__main__":
     p=Player(cards1)
     print(p)
     print("_____________")
-    p.pop(13,"hearts")
+    p.draw(13,"hearts")
     print(p)
     print("_____________")
     p.add(d.pop())
