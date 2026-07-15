@@ -7,9 +7,10 @@ class Card:
     trump_suit = None
     current_suit = None
 
-    def __init__(self, rank: int, suit: str):
+    def __init__(self, rank: int, suit: str, owner: int = 0):
         self.rank = rank
         self.suit = suit
+        self.owner = owner
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
@@ -86,8 +87,9 @@ class Deck:
         return self._cards.pop()
 
 class Player:
-    def __init__(self, cards: list = []):
-        self._cards = cards
+    def __init__(self, name: str, cards: list = []):
+        self._name = name
+        self.cards = cards
     
     def __str__(self):
         tmp = ""
@@ -98,6 +100,16 @@ class Player:
     def __iter__(self):
         for i in self._cards:
             yield str(i)
+
+    @property
+    def cards(self):
+        return self._cards
+
+    @cards.setter
+    def cards(self, cards):
+        for card in cards:
+            card.owner = self._name
+        self._cards = cards
 
     def draw(self, r: int, s: str) -> Card:
         for i in self._cards:
@@ -128,6 +140,7 @@ if __name__ == "__main__":
     print(c3 > c4, "True")
     print(c4 == c5, "True")
     print(c3 < c4, "False")
+    print(max(c2, c1))
     print(hash(c4), hash(c5))
     
     d=Deck()
@@ -136,11 +149,12 @@ if __name__ == "__main__":
     for i in range(5):
         cards1.append(d.pop())
 
-    p=Player(cards1)
+    p=Player("Player 1", cards1)
     print(p)
     print("_____________")
-    p.draw(13,"hearts")
+    c = p.draw(13,"hearts")
     print(p)
+    print(c.owner)
     print("_____________")
     p.add(d.pop())
     print(p)
