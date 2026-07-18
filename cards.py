@@ -58,15 +58,6 @@ class Card:
         else: return False
 
     @property
-    def rank(self) -> int:
-        return self._rank
-
-    @rank.setter
-    def rank(self, rank):
-        if 1 <= rank <= 13: self._rank = rank
-        else: raise ValueError("Card rank must be between 1 and 13")
-
-    @property
     def suit(self) -> str:
         return self._suit
 
@@ -82,8 +73,8 @@ class Deck:
         self._cards = cards
         self.game = game
 
-    def gen_cards(self, rank_range: int = 13, suits: list = suits):
-        for i in range(1, rank_range + 1):
+    def gen_cards(self, min_range: int = 1, max_range: int = 13, suits: list = suits):
+        for i in range(min_range, max_range + 1):
             for j in suits:
                 self._cards.append(Card(i, j.lower()))
 
@@ -146,13 +137,14 @@ class Player:
         self._id = id
 
     def draw(self, r: int, s: str) -> Card:
+        index, temp = None, None
         for i in self._cards:
             if (i.rank == r) and (i.suit ==s):
                 index = self._cards.index(i)
-                self.temp = self._cards[index]
+                temp = self._cards[index]
 
         del self._cards[index]
-        return self.temp
+        return temp
     
     def add(self, card: Card):
         self._cards.append(card)
@@ -160,7 +152,9 @@ class Player:
 
     def show(self, n: int):
         for card in self:
-            print(i)
+            if n > 0:
+                print(card)
+                n -= 1
 
 if __name__ == "__main__":
     d=Deck()

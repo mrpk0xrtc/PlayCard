@@ -6,8 +6,10 @@ import cards
 class Hokm:
     def __init__(self):
         self.deck = cards.Deck()
+        self.deck.gen_cards(2, 14)
         self.deck.shuffle()
         self.palyer1 = cards.Player("1",self.give_hand(13))
+
         self.player2 = cards.Player("2",self.give_hand(13))
         self.player3 = cards.Player("3",self.give_hand(13))
         self.player4 = cards.Player("4", self.give_hand(13))
@@ -16,9 +18,10 @@ class Hokm:
         self.raundscore=[0,0]
         self.gamescore=[0,0]
         self.teamwinner=str()
-
-        self.hokm = input("1.diamonds\n 2.hearts\n 3.spades\n 4.clubs\nEnter hokm:")
+        self.hakem.show(5)
+        self.hokm = input("\n\n1.diamonds\n 2.hearts\n 3.spades\n 4.clubs\nEnter hokm:")
         cards.Card.trump_suit = self.hokm
+        run=self.Run()
 
     def Run(self):
         while True:
@@ -34,7 +37,7 @@ class Hokm:
                     elif self.gamescore[1]>self.gamescore[0]:
                         print("winter team is team 2")
                     break
-            elif self.roundscore[1]==7:
+            elif self.raundscore[1]==7:
                 self.gamescore[1]+=1
                 self.raundscore[0]=0
                 self.raundscore[1]=0
@@ -47,19 +50,22 @@ class Hokm:
                     break
 
     def game(self,winner):
-            temp_n = int(winner.id)
-            for i in range(1,4):
+            temp_n = int(winner.id)-1
+            tmp_dict = {}
+            for i in range(1,5):
+                print(f"player {temp_n+1}")
                 print(self.playerlist[temp_n])
                 temp_card=input("Enter your card")
                 t = temp_card.split()
                 temp=self.playerlist[temp_n].draw(int(t[0]),t[1])
-                tmp_dict = {}
                 tmp_dict[temp_n]={temp}
                 temp_n+=1
-                if temp_n%4==0:
+                if temp_n%5==0:
                     temp_n=0
-            winner_card = max(tmp_dict[1],tmp_dict[2],tmp_dict[3],tmp_dict[4])
-            winner(winner_card.id)
+            print(tmp_dict)
+            winner_card = list(max(tmp_dict[0],tmp_dict[1],tmp_dict[2],tmp_dict[3]))[0]
+            print(winner_card)
+            self.winner(winner_card.owner.id)
     def winner(self,winnercard):
         if winnercard in ["1","3"]:
             self.roundscores[0] +=1
