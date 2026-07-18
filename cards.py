@@ -9,6 +9,14 @@ class Game:
         self.players = players
         self.trump_suit = trump_suit
         self.current_suit = current_suit
+        self.decks = {}
+
+    def add_player(self, player):
+        self.players.append(player)
+
+    def add_deck(self, name: str, deck):
+        self.decks[name] = deck
+        deck.game = self
 
 class Card:
     def __init__(self, rank: int, suit: str, owner: int = 0, game: Game = None):
@@ -36,7 +44,7 @@ class Card:
             else: return False
 
         elif self.suit == self.game.trump_suit:
-            if other.suit == Card.trump_suit:
+            if other.suit == self.game.trump_suit:
                 return True if self.rank > other.rank else False
             else:
                 return True
@@ -70,8 +78,9 @@ class Card:
         else: raise ValueError("Card suit must be spades, clubs, diamonds, hearts or joker")
 
 class Deck: 
-    def __init__(self, cards: list = []):
+    def __init__(self, cards: list = [], game: Game = None):
         self._cards = cards
+        self.game = game
 
     def gen_cards(self, rank_range: int = 13, suits: list = suits):
         for i in range(1, rank_range + 1):
@@ -85,6 +94,16 @@ class Deck:
         for i in self._cards:
             yield str(i)
     
+    @property
+    def game(self) -> Game:
+        return self._game
+
+    @game.setter
+    def game(self, game):
+        for card in self._cards:
+            card.game = game
+        self._game = game
+
     def shuffle(self):
         random.shuffle(self._cards)
 
@@ -145,16 +164,17 @@ if __name__ == "__main__":
     cards1=[]
     for i in range(5):
         cards1.append(d.pop())
-
     p=Player("Player 1", cards1)
-    g=Game("Game 1", [p])
-    c1 = Card(4, "spades")
+    g=Game("Game 1")
+    g.add_player(p)
+    g.add_deck("main", d)
+    c1 = Card(4, "spades", game=g)
     g.trump_suit = "hearts"
     g.current_suit = "spades"
-    c2 = Card(5, "spades")
-    c3 = Card(2, "hearts")
-    c4 = Card(7, "clubs")
-    c5 = Card(7, "clubs")
+    c2 = Card(5, "spades", game=g)
+    c3 = Card(2, "hearts", game=g)
+    c4 = Card(7, "clubs", game=g)
+    c5 = Card(7, "clubs", game=g)
     print(c2 > c1, "True")
     print(c1 > c2, "False")
     print(c2 > c4, "True")
