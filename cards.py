@@ -158,6 +158,10 @@ class Player:
         self._cards.append(card)
         return 0
 
+    def show(self, n: int):
+        for card in self:
+            print(i)
+
 if __name__ == "__main__":
     d=Deck()
     d.gen_cards()
