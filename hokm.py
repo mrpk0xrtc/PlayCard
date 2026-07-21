@@ -5,7 +5,8 @@ import cards
 
 class Hokm:
     def __init__(self):
-        self.deck = cards.Deck()
+        self.game1=cards.Game("hokm")
+        self.deck = cards.Deck(game=self.game1)
         self.deck.gen_cards(2, 14)
         self.deck.shuffle()
         self.palyer1 = cards.Player("1",self.give_hand(13))
@@ -20,7 +21,8 @@ class Hokm:
         self.teamwinner=str()
         self.hakem.show(5)
         self.hokm = input("\n\n1.diamonds\n 2.hearts\n 3.spades\n 4.clubs\nEnter hokm:")
-        cards.Card.trump_suit = self.hokm
+        self.game1.trump_suit=self.hokm
+        
         run=self.Run()
 
     def Run(self):
@@ -58,24 +60,28 @@ class Hokm:
                 temp_card=input("Enter your card")
                 t = temp_card.split()
                 temp=self.playerlist[temp_n].draw(int(t[0]),t[1])
-                tmp_dict[temp_n]={temp}
+                tmp_dict[temp_n]=temp
                 temp_n+=1
-                if temp_n%5==0:
+                if temp_n%4==0:
                     temp_n=0
             print(tmp_dict)
             winner_card = list(max(tmp_dict[0],tmp_dict[1],tmp_dict[2],tmp_dict[3]))[0]
             print(winner_card)
             self.winner(winner_card.owner.id)
+
+
+
+
     def winner(self,winnercard):
         if winnercard in ["1","3"]:
-            self.roundscores[0] +=1
+            self.raundscore[0] +=1
             if self.hakem in [self.palyer1,self.player3]:
                 pass
             else :
                 self.hakem=random.choice([self.palyer1,self.player3])
 
         if winnercard in ["2","4"]:
-            self.roundscores[1] +=1
+            self.raundscore[1] +=1
             if self.hakem in [self.player2,self.player4]:
                 pass
             else :
